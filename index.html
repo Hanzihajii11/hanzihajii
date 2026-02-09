@@ -15,9 +15,9 @@
             --bg: #ffffff; --text: #1a1a1a; --card: #f2f2f2; --header: #eeeeee;
         }
 
-        body { margin: 0; font-family: 'Lexend', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; }
+        body { margin: 0; font-family: 'Lexend', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
 
-        /* LOGO HANZI WEB - CHỮ VIẾT TAY */
+        /* LOGO HANZI WEB */
         header { 
             padding: 40px 5%; 
             background: var(--header); 
@@ -26,39 +26,46 @@
         }
         .logo-text {
             font-family: 'Dancing Script', cursive;
-            font-size: 65px;
+            font-size: clamp(40px, 10vw, 70px);
             color: var(--primary);
             margin: 0;
             cursor: pointer;
             text-shadow: 2px 2px 10px rgba(255, 140, 0, 0.3);
         }
 
-        /* THANH TÌM KIẾM */
+        /* TÌM KIẾM */
         .search-container { padding: 20px 5%; background: var(--header); text-align: center; }
         .search-bar {
-            width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 30px; 
+            width: 90%; max-width: 500px; padding: 12px 25px; border-radius: 30px; 
             border: 2px solid var(--primary); background: var(--card); color: var(--text); outline: none;
             font-size: 16px;
         }
 
-        /* MENU PHÂN LOẠI BO GÓC CHUẨN */
-        nav { background: var(--header); display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding: 15px 5%; border-bottom: 1px solid #333; }
+        /* MENU PHÂN LOẠI */
+        nav { background: var(--header); display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 15px 5%; border-bottom: 1px solid #333; }
         nav button {
-            cursor: pointer; color: var(--text); font-size: 12px; font-weight: 700; padding: 12px 24px;
-            border: 3px solid #000; border-radius: 15px; background: var(--card); transition: 0.2s; text-transform: uppercase;
+            cursor: pointer; color: var(--text); font-size: 11px; font-weight: 700; padding: 10px 20px;
+            border: 3px solid #000; border-radius: 12px; background: var(--card); transition: 0.2s; text-transform: uppercase;
         }
         nav button.active, nav button:hover { background: var(--primary); color: white; transform: translateY(-3px); }
 
-        /* DANH SÁCH BÀI VIẾT (GRID) */
-        .container { padding: 30px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--card); border-radius: 15px; overflow: hidden; border: 2px solid #333; transition: 0.3s; }
+        /* DANH SÁCH BÀI VIẾT */
+        .container { padding: 30px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .card { background: var(--card); border-radius: 15px; overflow: hidden; border: 2px solid #333; transition: 0.3s; position: relative; }
         .card.hidden { display: none; }
-        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card img { width: 100%; height: 160px; object-fit: cover; }
         .card-body { padding: 15px; }
-        .btn-dl { display: block; width: 100%; padding: 12px 0; background: var(--primary); color: white; text-align: center; text-decoration: none; font-weight: bold; border-radius: 10px; }
+        .card-tag { font-size: 10px; color: var(--primary); font-weight: bold; text-transform: uppercase; }
+        .card-title { font-weight: bold; margin: 8px 0; height: 40px; overflow: hidden; font-size: 15px; }
+        .btn-dl { display: block; width: 100%; padding: 10px 0; background: var(--primary); color: white; text-align: center; text-decoration: none; font-weight: bold; border-radius: 10px; font-size: 14px; }
 
-        /* NÚT ĐỔI MÀU NỀN */
-        .theme-switch { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 26px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        /* NÚT ĐỔI GIAO DIỆN */
+        .theme-switch { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* ADMIN PANEL DƯỚI GÓC */
+        .admin-controls { position: fixed; bottom: 10px; left: 10px; font-size: 10px; color: #555; z-index: 100; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; }
+        .admin-controls span { cursor: pointer; margin-right: 10px; }
+        .admin-controls span:hover { color: var(--primary); }
     </style>
 </head>
 <body id="mainBody">
@@ -68,7 +75,7 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInp" class="search-bar" placeholder="Tìm kiếm Map, Addon, Shader..." onkeyup="search()">
+        <input type="text" id="searchInp" class="search-bar" placeholder="Tìm kiếm tài nguyên..." onkeyup="search()">
     </div>
 
     <nav id="filterMenu">
@@ -80,36 +87,87 @@
         <button onclick="filter('version', this)">PHIÊN BẢN</button>
     </nav>
 
-    <div class="container" id="grid">
-        </div>
+    <div class="container" id="grid"></div>
 
     <div class="theme-switch" onclick="toggleTheme()" id="tBtn">🌙</div>
     
-    <div style="position:fixed; bottom:10px; left:10px; font-size:10px; cursor:pointer; color:#555;" onclick="adminIn()">ADMIN PANEL</div>
+    <div class="admin-controls">
+        <span onclick="adminIn()">+ ĐĂNG BÀI</span>
+        <span onclick="deleteLast()">× XÓA BÀI GẦN NHẤT</span>
+    </div>
 
     <script>
-        function toggleTheme() {
-            const b = document.getElementById('mainBody');
-            b.classList.toggle('light-mode');
-            document.getElementById('tBtn').innerHTML = b.classList.contains('light-mode') ? '☀️' : '🌙';
+        // CÀI ĐẶT MẬT KHẨU CỦA BẠN TẠI ĐÂY
+        const ADMIN_PASSWORD = "hanzihajii"; 
+
+        function adminIn() {
+            const pass = prompt("NHẬP MẬT KHẨU ADMIN:");
+            // Sửa lỗi: So sánh với ADMIN_PASSWORD thay vì hanzihajii (biến chưa khai báo)
+            if (pass === ADMIN_PASSWORD) {
+                const t = prompt("Tên bài (Vd: Addon Rồng):");
+                const c = prompt("Loại (map/addon/shader/resource/version):");
+                const i = prompt("Link ảnh minh họa:");
+                const l = prompt("Link tải rút gọn:");
+                
+                if(t && l) {
+                    const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
+                    data.unshift({title: t, cat: c, img: i, link: l});
+                    localStorage.setItem('hanzi_data', JSON.stringify(data));
+                    load();
+                    alert("Đã đăng bài thành công! ✅");
+                }
+            } else if (pass !== null) {
+                alert("Sai mật khẩu! ❌");
+            }
+        }
+
+        function deleteLast() {
+            const pass = prompt("NHẬP MẬT KHẨU ĐỂ XÓA BÀI MỚI NHẤT:");
+            if (pass === ADMIN_PASSWORD) {
+                let data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
+                if (data.length > 0) {
+                    if (confirm("Bạn có chắc muốn xóa bài trên cùng không?")) {
+                        data.shift();
+                        localStorage.setItem('hanzi_data', JSON.stringify(data));
+                        load();
+                        alert("Đã xóa xong! 🗑️");
+                    }
+                } else {
+                    alert("Không có bài nào để xóa!");
+                }
+            } else if (pass !== null) {
+                alert("Sai mật khẩu! ❌");
+            }
         }
 
         function load() {
             const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
+            
+            if (data.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.5;">Chưa có bài đăng nào. Bấm ĐĂNG BÀI ở góc dưới để bắt đầu!</p>';
+                return;
+            }
+
             data.forEach(p => {
                 grid.innerHTML += `
                     <div class="card" data-cat="${p.cat}" data-title="${p.title.toLowerCase()}">
                         <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x180?text=Hanzi+Web'">
                         <div class="card-body">
-                            <div style="font-size:10px; color:var(--primary); font-weight:bold;">${p.cat.toUpperCase()}</div>
-                            <div style="font-weight:bold; margin:10px 0; height:40px; overflow:hidden;">${p.title}</div>
+                            <div class="card-tag">${p.cat}</div>
+                            <div class="card-title">${p.title}</div>
                             <a href="${p.link}" target="_blank" class="btn-dl">TẢI XUỐNG</a>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function toggleTheme() {
+            const b = document.getElementById('mainBody');
+            b.classList.toggle('light-mode');
+            document.getElementById('tBtn').innerHTML = b.classList.contains('light-mode') ? '☀️' : '🌙';
         }
 
         function filter(cat, btn) {
@@ -125,20 +183,6 @@
             document.querySelectorAll('.card').forEach(c => {
                 c.classList.toggle('hidden', !c.getAttribute('data-title').includes(s));
             });
-        }
-
-        // Đăng bài nhanh (Chỉ dành cho AD)
-        function adminIn() {
-            const t = prompt("Tên tài nguyên:"), 
-                  c = prompt("Loại (map/addon/shader/resource/version):"), 
-                  i = prompt("Link ảnh minh họa:"), 
-                  l = prompt("Link tải rút gọn:");
-            if(t && l) {
-                const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
-                data.unshift({title:t, cat:c, img:i, link:l});
-                localStorage.setItem('hanzi_data', JSON.stringify(data));
-                load();
-            }
         }
 
         window.onload = load;
