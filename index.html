@@ -128,24 +128,16 @@
         }
 
         // Đăng bài nhanh (Chỉ dành cho AD)
-        const ADMIN_PASSWORD = "hanzi123"; // Đổi mật khẩu ở đây nhe
-
         function adminIn() {
-            const pass = prompt("NHẬP MẬT KHẨU ADMIN:");
-            if (pass === ADMIN_PASSWORD) {
-                const t = prompt("Tên tài nguyên:"),
-                      c = prompt("Loại (map/addon/shader/resource/version):"),
-                      i = prompt("Link ảnh minh họa:"),
-                      l = prompt("Link tải rút gọn:");
-                if(t && l) {
-                    const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
-                    data.unshift({title:t, cat:c, img:i, link:l});
-                    localStorage.setItem('hanzi_data', JSON.stringify(data));
-                    load();
-                    alert("Đăng bài thành công! ✅");
-                }
-            } else if (pass !== null) {
-                alert("Sai mật khẩu rồi bạn ơi! ❌");
+            const t = prompt("Tên tài nguyên:"), 
+                  c = prompt("Loại (map/addon/shader/resource/version):"), 
+                  i = prompt("Link ảnh minh họa:"), 
+                  l = prompt("Link tải rút gọn:");
+            if(t && l) {
+                const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
+                data.unshift({title:t, cat:c, img:i, link:l});
+                localStorage.setItem('hanzi_data', JSON.stringify(data));
+                load();
             }
         }
 
@@ -153,4 +145,3 @@
     </script>
 </body>
 </html>
-
