@@ -128,20 +128,74 @@
         }
 
         // Đăng bài nhanh (Chỉ dành cho AD)
+    <script>
+        // MẬT KHẨU CỦA BẠN (Bạn có thể đổi chữ 'hanzi123' thành gì tùy thích)
+        const ADMIN_PASSWORD = "hanzi123"; 
+
         function adminIn() {
-            const t = prompt("Tên tài nguyên:"), 
-                  c = prompt("Loại (map/addon/shader/resource/version):"), 
-                  i = prompt("Link ảnh minh họa:"), 
-                  l = prompt("Link tải rút gọn:");
-            if(t && l) {
-                const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
-                data.unshift({title:t, cat:c, img:i, link:l});
-                localStorage.setItem('hanzi_data', JSON.stringify(data));
-                load();
+            const pass = prompt("XÁC MINH DANH TÍNH ADMIN:");
+            if (pass === ADMIN_PASSWORD) {
+                const t = prompt("Tên bài viết:");
+                const c = prompt("Loại (map/addon/shader/resource/version):");
+                const i = prompt("Link ảnh minh họa:");
+                const l = prompt("Link tải rút gọn:");
+                
+                if(t && l) {
+                    const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
+                    data.unshift({title:t, cat:c, img:i, link:l});
+                    localStorage.setItem('hanzi_data', JSON.stringify(data));
+                    load();
+                    alert("ĐÃ ĐĂNG BÀI THÀNH CÔNG! ✅");
+                }
+            } else if (pass !== null) {
+                alert("SAI MẬT KHẨU! BẠN KHÔNG CÓ QUYỀN TRUY CẬP. ❌");
             }
+        }
+
+        function toggleTheme() {
+            const b = document.getElementById('mainBody');
+            b.classList.toggle('light-mode');
+            document.getElementById('tBtn').innerHTML = b.classList.contains('light-mode') ? '☀️' : '🌙';
+        }
+
+        function load() {
+            const data = JSON.parse(localStorage.getItem('hanzi_data')) || [];
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            data.forEach(p => {
+                grid.innerHTML += `
+                    <div class="card" data-cat="${p.cat}" data-title="${p.title.toLowerCase()}">
+                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x180?text=Hanzi+Web'">
+                        <div class="card-body">
+                            <div style="font-size:10px; color:var(--primary); font-weight:bold;">${p.cat.toUpperCase()}</div>
+                            <div style="font-weight:bold; margin:10px 0; height:40px; overflow:hidden;">${p.title}</div>
+                            <a href="${p.link}" target="_blank" class="btn-dl">TẢI XUỐNG</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filter(cat, btn) {
+            document.querySelectorAll('#filterMenu button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.toggle('hidden', cat !== 'all' && c.getAttribute('data-cat') !== cat);
+            });
+        }
+
+        function search() {
+            const s = document.getElementById('searchInp').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.toggle('hidden', !c.getAttribute('data-title').includes(s));
+            });
         }
 
         window.onload = load;
     </script>
+
+        window.onload = load;
+    </script>
 </body>
+
 </html>
